@@ -6,4 +6,5 @@ rsna**
 xray**
 rsna-pneumonia-detection-challenge.zip
 .ipynb_checkpoints**
-
+__pycache__/**
+ckpt-**
