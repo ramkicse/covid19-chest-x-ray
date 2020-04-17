@@ -1,0 +1,9 @@
+checkpoint**
+covid-chestxray-dataset**
+data/**
+logs**
+rsna**
+xray**
+rsna-pneumonia-detection-challenge.zip
+.ipynb_checkpoints**
+
