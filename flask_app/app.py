@@ -6,6 +6,8 @@
 
 from flask import Flask, render_template, request
 import torch
+import torch.nn.functional as F
+
 import torchvision
 from PIL import Image
 from torchvision import transforms, models
@@ -32,19 +34,18 @@ from torchvision.utils import make_grid, save_image
 # In[6]:
 
 
-checkpoint = 'ckpt-2999.pth.tar'
+checkpoint = 'ckpt-900.pth.tar'
 
 
 # In[7]:
 
 
 model = models.resnet50(pretrained=False)
-model.conv1 = nn.Conv2d(1, 64, kernel_size=(7, 7), stride=(2, 2), padding=(3, 3), bias=False)
 model.fc = nn.Sequential(nn.Linear(2048, 512),
                                  nn.ReLU(),
                                  nn.Dropout(0.2),
-                                 nn.Linear(512, 2),
-                                 nn.LogSoftmax(dim=1))
+                                 nn.Linear(512, 3),
+                                nn.Softmax(1))
 
 
 # In[8]:
@@ -75,7 +76,10 @@ for k, v in state_dict.items():
 model.load_state_dict(new_state_dict)
 print('Model loaded')
 model.eval()
-model = model.cuda()
+
+
+if torch.cuda.is_available():
+    model = model.cuda()
 # In[12]:
 
 gradcam = GradCAM(model, model.layer4)
@@ -85,7 +89,10 @@ configs = [
     dict(model_type='resnet', arch=model, layer_name='layer4'),
 ]
 for config in configs:
-    config['arch'].cuda().eval()
+    if torch.cuda.is_available():
+        config['arch'].cuda().eval()
+    else:
+        config['arch'].eval()
 
 cams = [
     [cls.from_config(**config) for cls in (GradCAM, GradCAMpp)]
@@ -94,7 +101,7 @@ cams = [
 
 gradcam, gradcam_pp = cams[0]
 
-transform = transforms.Compose([transforms.Grayscale(1),
+transform = transforms.Compose([
                                       transforms.Resize((224,224)),
                                       transforms.ToTensor()
                                      
@@ -102,6 +109,9 @@ transform = transforms.Compose([transforms.Grayscale(1),
 
 normalize =  transforms.Normalize(mean=[0.5], std=[0.5])
 
+
+classes = ['normal', 'COVID-19', 'other_pneumonia']
+class_dict ={classes[i]: i for i in range(3)}
 
 # In[13]:
 
@@ -117,18 +127,15 @@ app = Flask(__name__, static_folder='.')
 
 # In[19]:
 
-root_dir='/home/ramkik/covid19/static/'
+root_dir=os.getcwd()
+print(root_dir)
 
 @app.route('/assets/<path:filename>')
 def serve_static(filename):
-    #root_dir = os.path.dirname(os.getcwd())
-    #print(os.path.join(root_dir,'assets/'), filename)
     return send_from_directory(os.path.join(root_dir,'assets/'),filename)
 
 @app.route('/result')
 def serve_result():
-    #root_dir = os.path.dirname(os.getcwd())
-    #print(os.path.join(root_dir,'assets/'), filename)
     return send_from_directory(os.path.join(root_dir),'result.png')
 
 @app.route('/')
@@ -146,13 +153,21 @@ def predict():
     print(file_path)
     f.save(file_path)
     #file_path='/home/ramkik/covid19/static/uploads/E63574A7-4188-4C8D-8D17-9D67A18A1AFA.jpeg'
-    image = Image.open(file_path)
+    image = Image.open(file_path).convert('RGB')
+
     image = transform(image)
 
     normalize_image = normalize(image)
     normalize_image = normalize_image.unsqueeze(0)
-    normalize_image = normalize_image.cuda()
+    if torch.cuda.is_available():
+        normalize_image = normalize_image.cuda()
+        
+    #print(normalize_image.shape)
     output = model(normalize_image)
+    print(output)
+
+#     output = F.softmax(output)
+#     print(output)
     prediction_score, pred_label_idx = torch.topk(output, 1)
     pred_label_idx.squeeze_()
 
@@ -175,11 +190,8 @@ def predict():
     print(pred_label_idx)
     print(prediction_score)
 
-    if pred_label_idx.item() == 0:
-        response['class'] = 'COVID-19'
-    else:
-        response['class'] = 'NORMAL'
-    response['score'] = str(pow(10.0,prediction_score.item()))
+    response['class'] = classes[pred_label_idx.item()]
+    response['score'] = str(prediction_score.item())
 
     return response
 

@@ -8,3 +8,6 @@ rsna-pneumonia-detection-challenge.zip
 .ipynb_checkpoints**
 __pycache__/**
 ckpt-**
+flask_app/__pycache__/**
+flask_app/result*
+flask_app/__pycache__
