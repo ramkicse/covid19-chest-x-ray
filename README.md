@@ -2,6 +2,8 @@
 
 ![COVID-19!](https://www2.deloitte.com/content/dam/insights/us/articles/6677_covid-19/images/6677_banner1.jpg/_jcr_content/renditions/cq5dam.web.1440.660.jpeg)
 ![version!](https://img.shields.io/badge/covid19--chest--x--ray-1.0.0-blue)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/ramkicse/covid19-chest-x-ray/master)
+
 ## Install all dependencies
     conda env create -f environment.yml
 
