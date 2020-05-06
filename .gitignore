@@ -11,3 +11,9 @@ ckpt-**
 flask_app/__pycache__/**
 flask_app/result*
 flask_app/__pycache__
+js_ai/**
+medicalAI/**
+models/**
+server.log
+jsModel/**
+weights.99-0.00.hdf5
