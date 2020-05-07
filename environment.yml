@@ -1,4 +1,4 @@
-name: covid
+name: tf2
 channels:
   - defaults
 dependencies:
@@ -137,5 +137,5 @@ dependencies:
     - seaborn==0.10.1
     - sklearn==0.0
     - tqdm==4.46.0
-prefix: /home/seq/miniconda3/envs/covid
+prefix: /home/seq/miniconda3/envs/tf2
 
