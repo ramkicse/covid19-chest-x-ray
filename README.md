@@ -13,6 +13,24 @@
 
 [Tensorboard](https://tensorboard.dev/experiment/MtKnPfBgTlmlyUNHrZP2oQ/#scalars) 
 
+# Table of contents
+
+- [Diagnosing COVID-19 using AI-based medical Image Analyses](#diagnosing-covid-19-using-ai-based-medical-image-analyses)
+  - [Demo](#demo)
+- [**Introduction**](#introduction)
+  - [**Why chest X-ray/CT scan?**](#why-chest-x-rayct-scan)
+  - [**Flowchart of the pipeline **](#flowchart-of-the-pipeline-)
+  - [**DataSet:**](#dataset)
+  - [**Data Preprocessing**](#data-preprocessing)
+  - [**Data augmentation**](#data-augmentation)
+- [**Model Training**](#model-training)
+- [**Evaluation metrics being used**](#evaluation-metrics-being-used)
+  - [**ROC curve**](#roc-curve)
+- [**Model Interpretability  **(Grad - CAM Gradient-weighted Class Activation Mapping)](#model-interpretability--grad---cam-gradient-weighted-class-activation-mapping)
+- [**Model Deployment**](#model-deployment-)
+  - [**Online Mode **](#online-mode-)
+  - [**Offline Mode **](#offline-mode-)
+- [**Links**](#links)
 ## Install all dependencies
 
     conda env create -f environment.yml
@@ -32,9 +50,9 @@
 
     jupyter-lab --ip=0.0.0.0
 
-**Introduction**
+# **Introduction**
 
-**Why chest X-ray/CT scan?**
+## **Why chest X-ray/CT scan?**
 
 In the last few months, the novel COVID19 pandemic has spread all over the world. Effective screening of infected patients is a critical step in the fight against COVID-19. Due to its easy transmission, developing techniques to accurately and easily identify the presence of COVID19 and distinguish it from other forms of flu and pneumonia is crucial. One of the key screening approaches is radiological imaging using chest radiography. Recent research has shown that the chest X-rays of patients suffering from COVID19 depicts certain abnormalities in the radiography.  
 
@@ -44,13 +62,13 @@ In the last few months, the novel COVID19 pandemic has spread all over the world
 
 The severity of COVID-19 varies significantly from person to person. Chest CT may also be used as an initial tool to assess disease severity, as well as to monitor for progression or resolution of disease
 
-**Flowchart of the pipeline :**
+## **Flowchart of the pipeline :**
 
 
 ![alt_text](https://raw.githubusercontent.com/ramkicse/covid19-chest-x-ray/master/readme_assets/flowchart.jpg "Flowchart")
 
 
-**DataSet:**
+## **DataSet:**
 
 For any model, be it deep learning or machine learning model, sufficient amount of correctly labelled data is required. Balanced amount of data needs to be used for training the model, otherwise it will introduce unwanted bias in the model. That is, the amount of data for all types of labeled data should be in proper proportion such that it does not introduce a bias for a class. As in this problem statement, getting enough labeled data for the chest x-rays is difficult so we will be combining the datasets from multiple sources (as per the availability)
 
@@ -59,7 +77,7 @@ For any model, be it deep learning or machine learning model, sufficient amount 
 *   [https://github.com/ieee8023/covid-chestxray-dataset](https://github.com/ieee8023/covid-chestxray-dataset)
 *   [https://www.kaggle.com/c/rsna-pneumonia-detection-challenge](https://www.kaggle.com/c/rsna-pneumonia-detection-challenge) (which came from: [https://nihcc.app.box.com/v/ChestXray-NIHCC](https://nihcc.app.box.com/v/ChestXray-NIHCC))
 
-**Data Preprocessing**:
+## **Data Preprocessing**:
 
 As data will be coming from multiple sources, the format of data may differ, hence we will be transforming all the data using some preprocessing and augmentation so that model will get a generalized format for further feature extraction. The context of this problem statement is Medical Imaging so some of the data can be in DICOM(Digital Imaging and Communications in Medicine) format or any other image file format (for eg: jpg). Following is the idea for preprocessing the available data:
 
@@ -70,7 +88,7 @@ As data will be coming from multiple sources, the format of data may differ, hen
 *   We can clean the x-ray images to remove any textual information printed on them.
 *   Resize the image as required by the input layer of Neural Network (for eg 224 X 224).
 
-**Data augmentation:**
+## **Data augmentation:**
 
 Another way to mitigate data deficiency is data augmentation: from the limited training data, creating new image-label pairs and adding the synthesized pairs into the training set. Color Jitter, Scaling, Flip, Rotations and other affine transformations are typical. This makes the neural network exposed to a wide variety of variations and less likely  to recognize unwanted characteristics in the data-set.
 
@@ -123,7 +141,7 @@ Table summarizes the number of COVID and Normal images in each set. All images a
 
 Our dataset is an imbalance dataset, meaning the number of x-ray images in the training dataset for each class label is not balanced. Imbalanced classification refers to a classification predictive modeling problem where the number of examples in the training dataset for each class label is not balanced. That is, where the class distribution is not equal or close to equal, and is instead biased or skewed.
 
-**Model Training**
+# **Model Training**
 
 We are using the ResNet-50 architecture based image recognition system. We loaded the pre-trained imagenet weights with a classifier with 1000 classes and then changed the classifier layers to 3 classes (Normal, Covid19, Pneumonia). It's usually called Transfer Learning.
 
@@ -134,7 +152,7 @@ Train the model against our dataset for 1000 epoch using Adam Optimizer with 0.0
 ![alt_text](https://raw.githubusercontent.com/ramkicse/covid19-chest-x-ray/master/readme_assets/training.jpg "Traing Tensorboard Graph")
 
 
-**Evaluation metrics being used:**
+# **Evaluation metrics being used:**
 
 I'll discuss common metrics used to evaluate models.
 
@@ -163,7 +181,7 @@ The three main metrics used to evaluate a classification model are accuracy, pre
 ![classification_report](https://lh3.googleusercontent.com/zbRzf3xfXfGCW3yhxN6CGwXUuIRC9t60WkaD1a9dmwt8FzhGcYzI_TynhZy8WWP_TdmBl7FWc1TPNFBCKICIjz13r0Qr82j85GJqvA3aycnahGM6pzJSIiZG-DNCm6gthxG8NVlP)
 
 
-**ROC curve**
+## **ROC curve**
 
 ROC stands for receiver operating characteristic and the graph is plotted against True Positive Rate (TPR) and False Positive Rate (FPR) for various threshold values. As TPR increases FPR also increases.
 
@@ -173,7 +191,7 @@ ROC stands for receiver operating characteristic and the graph is plotted agains
 ![roc_auc_curve](https://lh3.googleusercontent.com/I2mnbD9vKJVNdUHYcTBpu-tPwwUFGvxNL4byNIi6MEH9qAflLEVhJc2BrmmLBZznW6X7s9G0ppCKjkgr8uIngfL7KthX-5RvsIZFWXzLROnqmJX7fkIaWLjznSl_n-3-gQjod-4k)
 
 
-**Model Interpretability : **(Grad - CAM Gradient-weighted Class Activation Mapping)
+# **Model Interpretability : **(Grad - CAM Gradient-weighted Class Activation Mapping)
 
 Why to stop at what the prediction is when we can actually get to know why it is predicted so.
 
@@ -187,7 +205,7 @@ Following is the example where the image is colored for highlighting the regions
 **![interpretibility](https://lh4.googleusercontent.com/BioFSaebltIz6xBu-tPD1cpQ07_EauvevncYMmVBoP5wGYVrXaLGMbaBI8eSifjQr7VkEq2wPWPueQ89SNKTAJSCY0XAWHu2LD5cukTfAC26vobP9AK4mx-ljDg5F1ZxKIxyVZSH)**
 **- **
 
-**Model Deployment :**
+# **Model Deployment :**
 
 We can have two modes of deployment viz. 
 
@@ -196,7 +214,7 @@ We can have two modes of deployment viz.
 *   Online mode 
 *   Offline Mode
 
-**Online Mode :**
+## **Online Mode :**
 
 Once model trained then we are going to deploy it into a server with Python based Flask web framework. Flask is a Python library that makes it easy to set up Python functions that can be invoked via the web. It uses annotations to provide metadata about which functions to set up at which endpoints.
 
@@ -212,7 +230,7 @@ Once the user submits the chest x-ray image via browser, it's sent back to Flask
 
 Here a single server handles all clients' queries. So It should have high end GPU based machine
 
-**Offline Mode :**
+## **Offline Mode :**
 
 Another way is more privacy oriented to move the model from server to client itself. So We need to convert the python based model to a JavaScript based ONNX  model.
 
@@ -243,7 +261,7 @@ Once a user installs or adds to their Home Page, PWA’s behave just like APPs. 
 
 
 
-**Links:**
+# **Links:**
 
 
 
