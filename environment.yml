@@ -1,4 +1,4 @@
-name: tf2
+name: covid
 channels:
   - defaults
 dependencies:
@@ -10,6 +10,7 @@ dependencies:
   - attrs=19.3.0=py_0
   - backcall=0.1.0=py37_0
   - blas=1.0=mkl
+  - bleach=3.1.4=py_0
   - blinker=1.4=py37_0
   - c-ares=1.15.0=h7b6447c_1001
   - ca-certificates=2020.1.1=0
@@ -20,6 +21,8 @@ dependencies:
   - click=7.1.1=py_0
   - cryptography=2.8=py37h1ba5d50_0
   - decorator=4.4.2=py_0
+  - defusedxml=0.6.0=py_0
+  - entrypoints=0.3=py37_0
   - gast=0.2.2=py37_0
   - gmp=6.1.2=h6c8ec71_1
   - google-auth=1.14.1=py_0
@@ -31,6 +34,8 @@ dependencies:
   - idna=2.9=py_1
   - importlib_metadata=1.5.0=py37_0
   - intel-openmp=2020.0=166
+  - ipykernel=5.1.4=py37h39e3cac_0
+  - ipython=7.13.0=py37h5ca1d4c_0
   - ipython_genutils=0.2.0=py37_0
   - jedi=0.17.0=py37_0
   - jinja2=2.11.2=py_0
@@ -58,6 +63,7 @@ dependencies:
   - mkl_fft=1.0.15=py37ha843d7b_0
   - mkl_random=1.1.0=py37hd6b4f25_0
   - nbconvert=5.6.1=py37_0
+  - nbformat=5.0.4=py_0
   - ncurses=6.2=he6710b0_1
   - notebook=6.0.3=py37_0
   - numpy=1.18.1=py37h4f9e942_0
@@ -69,10 +75,13 @@ dependencies:
   - pandocfilters=1.4.2=py37_1
   - parso=0.7.0=py_0
   - pexpect=4.8.0=py37_0
+  - pickleshare=0.7.5=py37_0
   - pip=20.0.2=py37_1
   - prometheus_client=0.7.1=py_0
+  - prompt-toolkit=3.0.4=py_0
   - prompt_toolkit=3.0.4=0
   - protobuf=3.11.4=py37he6710b0_0
+  - ptyprocess=0.6.0=py37_0
   - pyasn1=0.4.8=py_0
   - pyasn1-modules=0.2.7=py_0
   - pycparser=2.20=py_0
@@ -83,11 +92,13 @@ dependencies:
   - pysocks=1.7.1=py37_0
   - python=3.7.7=hcf32534_0_cpython
   - python-dateutil=2.8.1=py_0
+  - pyzmq=18.1.1=py37he6710b0_0
   - readline=8.0=h7b6447c_0
   - requests=2.23.0=py37_0
   - requests-oauthlib=1.3.0=py_0
   - rsa=4.0=py_0
   - scipy=1.4.1=py37h0b6359f_0
+  - send2trash=1.5.0=py37_0
   - setuptools=46.1.3=py37_0
   - six=1.14.0=py37_0
   - sqlite=3.31.1=h62c20be_1
@@ -96,12 +107,14 @@ dependencies:
   - tensorflow-base=2.1.0=mkl_py37h6d63fb7_0
   - tensorflow-estimator=2.1.0=pyhd54b08b_0
   - termcolor=1.1.0=py37_1
+  - terminado=0.8.3=py37_0
   - testpath=0.4.4=py_0
   - tk=8.6.8=hbc83047_0
   - tornado=6.0.4=py37h7b6447c_1
   - traitlets=4.3.3=py37_0
   - urllib3=1.25.8=py37_0
   - wcwidth=0.1.9=py_0
+  - webencodings=0.5.1=py37_1
   - werkzeug=1.0.1=py_0
   - wheel=0.34.2=py37_0
   - wrapt=1.12.1=py37h7b6447c_1
@@ -110,40 +123,19 @@ dependencies:
   - zipp=3.1.0=py_0
   - zlib=1.2.11=h7b6447c_3
   - pip:
-    - bleach==3.1.5
     - cycler==0.10.0
-    - defusedxml==0.6.0
-    - entrypoints==0.3
-    - importlib-metadata==1.6.0
-    - ipykernel==5.2.1
-    - ipython==7.14.0
-    - ipython-genutils==0.2.0
     - joblib==0.14.1
     - kiwisolver==1.2.0
     - matplotlib==3.2.1
-    - nbformat==5.0.6
     - opencv-python==4.2.0.34
-    - packaging==20.3
     - pandas==1.0.3
-    - pickleshare==0.7.5
     - pillow==7.1.2
-    - prompt-toolkit==1.0.14
-    - ptyprocess==0.6.0
     - pydicom==1.4.2
-    - pyinquirer==1.0.3
     - pyparsing==2.4.7
     - pytz==2020.1
-    - pyzmq==19.0.0
-    - regex==2020.4.4
     - scikit-learn==0.22.2.post1
     - seaborn==0.10.1
-    - send2trash==1.5.0
     - sklearn==0.0
-    - tensorflow-cpu==2.1.0
-    - tensorflow-hub==0.7.0
-    - tensorflowjs==1.7.4
-    - terminado==0.8.3
     - tqdm==4.46.0
-    - webencodings==0.5.1
-prefix: /home/seq/miniconda3/envs/tf2
+prefix: /home/seq/miniconda3/envs/covid
 
